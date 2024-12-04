@@ -1,0 +1,16 @@
+{
+    "welcome": "Bienvenido",
+    "login": "Ingresar",
+    "login_google": "Ingresaro con Google",
+    "register": "Crear cuenta",
+    "terms_and_conditions": "Al crear una cuenta aceptas los Términos y condiciones y la Política de privacidad.",
+    "login_title": "Iniciar sesión",
+    "user": "Usuario",
+    "email": "Correo electrónico",
+    "user_description": "Tu nombre de usuario",
+    "email_description": "Tu dirección de correo electrónico",
+    "password": "Contraseña",
+    "password_conditions": "Mínimo 6 caracteres y una mayúscula",
+    "internet_error_title": "Tu teléfono no tiene internet",
+    "internet_error_description": "Volvé a conectarte para seguir explorando TocToc."
+}
