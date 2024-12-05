@@ -14,6 +14,12 @@ import { removeTokens, getToken } from "../config/authToken";
 import { deleteUserAccount } from "../config/api";
 import Toast from "../components/Toast";
 
+// Idiomas disponibles
+const idiomasDisponibles = {
+  ingles: "Inglés",
+  espanol: "Español",
+};
+
 const SettingsScreen: React.FC = () => {
   const navigation = useNavigation();
   const [darkMode, setDarkMode] = useState(true);
@@ -23,6 +29,10 @@ const SettingsScreen: React.FC = () => {
 
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
+
+  // Modal de cambio de idioma
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("");
 
   const showErrorToast = (errorMessage) => {
     setToastStyle("failure");
@@ -97,6 +107,20 @@ const SettingsScreen: React.FC = () => {
     }
   };
 
+  const openLanguageModal = () => {
+    setLanguageModalVisible(true);
+  };
+
+  const closeLanguageModal = () => {
+    setLanguageModalVisible(false);
+  };
+
+  const handleLanguageSelection = (language) => {
+    setSelectedLanguage(language);
+    closeLanguageModal();
+    showSuccessToast(`Idioma cambiado a ${language}`);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -108,10 +132,18 @@ const SettingsScreen: React.FC = () => {
         <Text style={styles.icon}>🔒</Text>
       </View>
 
-      <View style={styles.option}>
+      {/* Opción para cambiar el idioma */}
+      <View style={styles.option} onTouchEnd={openLanguageModal}>
         <Text style={styles.optionText}>Idioma</Text>
         <Text style={styles.icon}>🌐</Text>
       </View>
+
+      {/* Muestra el idioma seleccionado
+      {selectedLanguage && (
+        <Text style={{ marginTop: 20, fontSize: 20 }}>
+          Idioma seleccionado: {selectedLanguage}
+        </Text>
+      )} */}
 
       <View style={styles.option}>
         <Text style={styles.optionText}>Modo Oscuro</Text>
@@ -136,6 +168,35 @@ const SettingsScreen: React.FC = () => {
         onClose={hideToast}
       />
 
+      {/* Modal para seleccionar el idioma */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isLanguageModalVisible}
+        onRequestClose={closeLanguageModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Seleccionar Idioma</Text>
+            {/* Lista de idiomas */}
+            {Object.values(idiomasDisponibles).map((idioma, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleLanguageSelection(idioma)}
+              >
+                <View style={styles.modalOption}>
+                  <Text>{idioma}</Text>
+                  {selectedLanguage === idioma ? <View style={styles.redonditoVerde}></View> : <></>}
+
+                </View>
+              </TouchableOpacity>
+            ))}
+            <Button title="Cerrar" onPress={closeLanguageModal} />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal de confirmación de eliminación de cuenta */}
       <Modal
         animationType="slide"
         transparent={true}

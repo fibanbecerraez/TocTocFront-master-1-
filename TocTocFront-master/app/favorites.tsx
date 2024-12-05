@@ -20,6 +20,7 @@ import { styles } from "./favorites.styles"; // Tu archivo de estilos
 const API_URL = "https://toctoc-production.up.railway.app";
 
 const FavoritesScreen = () => {
+  
   const [isSearching, setIsSearching] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
