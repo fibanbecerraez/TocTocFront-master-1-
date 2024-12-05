@@ -1,5 +1,12 @@
 import React from "react";
-import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Divider from "./Divider";
 
@@ -13,6 +20,13 @@ interface PostProps {
   comments: number;
   onPress: () => void;
 }
+
+const darLike = () => {
+  Alert.alert("Exito","Le has dado like a esta publicación");
+//   Aca va endpoint para ejecutar cuando se da like, (un post)
+// Si no le di like (+1)
+// Si ya le di like (-1)
+};
 
 const Post: React.FC<PostProps> = ({
   profileImage,
@@ -32,13 +46,19 @@ const Post: React.FC<PostProps> = ({
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.username}>{username}</Text>
           <Text style={styles.text}>{text}</Text>
+          {/* <Text>Vamoss boooooca</Text> */}
           {postImage && (
             <Image source={{ uri: postImage }} style={styles.postImage} />
           )}
           <Divider />
           <View style={styles.footer}>
             <View style={styles.iconContainer}>
-              <FontAwesome name="heart" size={16} color="#e0245e" />
+              <FontAwesome
+                name="heart"
+                size={16}
+                color="#e0245e"
+                onPress={() => darLike()}
+              />
               <Text style={styles.iconText}>{likes}</Text>
             </View>
             <View style={styles.iconContainer}>

@@ -1,13 +1,19 @@
-const API_URL = 'https://toctoc-production.up.railway.app';
-import { storeToken, getToken, getRefreshToken, removeTokens } from '../config/authToken';
+const API_URL = "https://toctoc-production.up.railway.app";
+import axios from "axios";
+import {
+  storeToken,
+  getToken,
+  getRefreshToken,
+  removeTokens,
+} from "../config/authToken";
 
 // Función para hacer el registro de usuario
 export const signUp = async (name, lastname, email, password, gender) => {
   try {
     const response = await fetch(`${API_URL}/users/signup`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
@@ -23,12 +29,12 @@ export const signUp = async (name, lastname, email, password, gender) => {
     if (!response.ok) {
       console.error(result);
       console.error(result.message);
-      throw new Error(result.message || 'Error en el registro');
+      // throw new Error(result.message || "Error en el registro");
     }
 
     return result;
   } catch (error) {
-    throw error;
+    // throw error;
   }
 };
 
@@ -36,9 +42,9 @@ export const signUp = async (name, lastname, email, password, gender) => {
 export const signIn = async (email, password) => {
   try {
     const response = await fetch(`${API_URL}/users/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email,
@@ -49,7 +55,7 @@ export const signIn = async (email, password) => {
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.message || 'Error en el inicio de sesión');
+      throw new Error(result.message || "Error en el inicio de sesión");
     }
 
     await storeToken(result.token, result.refreshToken);
@@ -64,22 +70,22 @@ export const signIn = async (email, password) => {
 export const deleteUserAccount = async () => {
   try {
     const token = await getToken();
-    if (!token) throw new Error('No hay token disponible');
+    if (!token) throw new Error("No hay token disponible");
 
     const response = await fetch(`${API_URL}/users`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (response.status === 204) {
       removeTokens();
-      return; 
+      return;
     } else {
       const result = await response.json();
-      throw new Error(result.message || 'Error al eliminar la cuenta');
+      throw new Error(result.message || "Error al eliminar la cuenta");
     }
   } catch (error) {
     throw error;
@@ -90,9 +96,9 @@ export const deleteUserAccount = async () => {
 export const recoveryPass = async (email) => {
   try {
     const response = await fetch(`${API_URL}/users/reset-password`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email,
@@ -102,7 +108,7 @@ export const recoveryPass = async (email) => {
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.message || 'Error al recuperar contraseña');
+      throw new Error(result.message || "Error al recuperar contraseña");
     }
 
     return result;
@@ -118,10 +124,10 @@ export const refreshAuthToken = async () => {
     if (!refreshToken) return null;
 
     const response = await fetch(`${API_URL}/users/refresh`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${refreshToken}`
-      }
+        Authorization: `Bearer ${refreshToken}`,
+      },
     });
 
     if (response.ok) {
@@ -130,7 +136,7 @@ export const refreshAuthToken = async () => {
       return token;
     }
   } catch (error) {
-    console.error('Error al refrescar el token:', error);
+    console.error("Error al refrescar el token:", error);
   }
   return null;
 };
@@ -139,16 +145,17 @@ export const refreshAuthToken = async () => {
 export const loadAllPosts = async (page = 0) => {
   try {
     const response = await fetch(`${API_URL}/post/all?page=${page}&size=4`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     const result = await response.json();
+    console.log(result)
 
     if (!response.ok) {
-      throw new Error(result.message || 'Hubo un problema al cargar los posts');
+      throw new Error(result.message || "Hubo un problema al cargar los posts");
     }
 
     return result;
@@ -161,36 +168,36 @@ export const loadAllPosts = async (page = 0) => {
 export const createPost = async (fileUri, content, location) => {
   try {
     const token = await getToken();
-    if (!token) throw new Error('No hay token disponible');
+    if (!token) throw new Error("No hay token disponible");
 
     const formData = new FormData();
 
     if (fileUri) {
       const file = {
         uri: fileUri,
-        type: fileUri.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg', // Tipo de archivo
-        name: fileUri.split('/').pop(), // Nombre del archivo
+        type: fileUri.endsWith(".mp4") ? "video/mp4" : "image/jpeg", // Tipo de archivo
+        name: fileUri.split("/").pop(), // Nombre del archivo
       };
 
-      formData.append('file', file);
+      formData.append("file", file);
     }
 
-    formData.append('title', 'Nuevo Post'); // título genérico
-    formData.append('content', content);
-    formData.append('location', location);
+    formData.append("title", "Nuevo Post"); // título genérico
+    formData.append("content", content);
+    formData.append("location", location);
 
     const response = await fetch(`${API_URL}/post/withFiles`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
       body: formData,
     });
 
     if (!response.ok) {
       const error = await response.text();
-      throw new Error(error || 'Error al crear el post');
+      throw new Error(error || "Error al crear el post");
     }
 
     return await response.json();
@@ -203,26 +210,26 @@ export const createPost = async (fileUri, content, location) => {
 export const createSimplePost = async (content, location) => {
   try {
     const token = await getToken();
-    if (!token) throw new Error('No hay token disponible');
+    if (!token) throw new Error("No hay token disponible");
 
     const response = await fetch(`${API_URL}/post`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: 'Nuevo Post', // título genérico
+        title: "Nuevo Post", // título genérico
         content,
-        location
-      })
+        location,
+      }),
     });
 
     if (!response.ok) {
       const error = await response.text();
       console.error(error);
       console.error(error.message);
-      throw new Error(error || 'Error al crear el post');
+      throw new Error(error || "Error al crear el post");
     }
 
     return await response.json();
@@ -237,18 +244,18 @@ export const createSimplePost = async (content, location) => {
 export const getUserProfile = async () => {
   try {
     const token = await getToken();
-    if (!token) throw new Error('No hay token disponible');
+    if (!token) throw new Error("No hay token disponible");
 
     const response = await fetch(`${API_URL}/users`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Error al obtener datos del usuario');
+      throw new Error("Error al obtener datos del usuario");
     }
 
     return await response.json();
@@ -261,20 +268,20 @@ export const getUserProfile = async () => {
 export const updateUserBio = async (bio) => {
   try {
     const token = await getToken();
-    if (!token) throw new Error('No hay token disponible');
+    if (!token) throw new Error("No hay token disponible");
 
     const response = await fetch(`${API_URL}/users`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ bio }),
     });
 
     if (!response.ok) {
       const result = await response.json();
-      throw new Error(result.message || 'Error al actualizar la biografía');
+      throw new Error(result.message || "Error al actualizar la biografía");
     }
 
     return await response.json();
@@ -285,17 +292,20 @@ export const updateUserBio = async (bio) => {
 
 export const getAds = async () => {
   try {
-    const response = await fetch('https://my-json-server.typicode.com/chrismazzeo/advertising_da1/ads', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      "https://my-json-server.typicode.com/chrismazzeo/advertising_da1/ads",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.message || 'Error al obtener los anuncios');
+      throw new Error(result.message || "Error al obtener los anuncios");
     }
 
     return result;

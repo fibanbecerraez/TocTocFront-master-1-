@@ -36,6 +36,7 @@ const TextField: React.FC<TextFieldProps> = ({ value, title, placeholder, secure
                 onChangeText={onChangeText}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry ?? false}
+                autoCapitalize='none'
                 placeholderTextColor={ColorManager.getColor('placeholderGray')}
             />
             {!isValid && value !== '' && errorMessage && (
