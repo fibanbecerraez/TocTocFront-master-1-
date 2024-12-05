@@ -180,6 +180,7 @@ const homeScreen = () => {
             autoFocus
             onSubmitEditing={handleSearchSubmit}
             onBlur={() => setIsSearching(false)}
+            autoCapitalize="none"
           />
         )}
       </View>

@@ -115,6 +115,7 @@ export const styles = StyleSheet.create({
   contenido: {
     justifyContent: "center",
     alignItems: "center",
+    padding: 10,
   },
   tituloFavoritos: {
     fontWeight: "bold",
@@ -123,5 +124,15 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(238, 232, 222, 0.3)", // Color EEE8DE con 80% de opacidad
     textAlign: "center",
     paddingVertical: 5,
+  },
+  containerFavorito: {
+    width: "100%",
+    height: "auto",
+    padding: 10,
+  },
+  favoritoImgProfile: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain"
   },
 });
