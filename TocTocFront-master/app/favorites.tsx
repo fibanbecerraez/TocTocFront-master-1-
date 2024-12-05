@@ -8,6 +8,7 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
@@ -98,6 +99,19 @@ const FavoritesScreen = () => {
     setPosts(filteredPosts);
     setIsSearching(false);
   };
+  const openPostModal = (post) => {
+    setSelectedPost(post);
+    setModalVisible(true);
+  };
+
+  const closePostModal = () => {
+    setModalVisible(false);
+    setSelectedPost(null);
+  };
+
+  const handleCreatePostPress = () => {
+    router.push("/createPost");
+  };
 
   return (
     <View style={styles.container}>
@@ -112,8 +126,48 @@ const FavoritesScreen = () => {
           refreshing={refreshing}
           onRefresh={handleRefresh}
           onLoadMore={handleLoadMore}
+          onPostPress={openPostModal}
         />
       )}
+      <TouchableOpacity
+        onPress={handleCreatePostPress}
+        style={styles.floatingButton}
+      >
+        <Icon name="add" size={30} color="#fff" />
+      </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closePostModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {selectedPost && (
+              <>
+                <Text style={styles.modalTitle}>{selectedPost.title}</Text>
+                <Text style={styles.modalBody}>{selectedPost.body}</Text>
+                <Text>s</Text>
+                <ScrollView>
+                  {selectedPost.comments &&
+                    selectedPost.comments.map((comment, index) => (
+                      <Text key={index} style={styles.comment}>
+                        {comment}
+                      </Text>
+                    ))}
+                </ScrollView>
+              </>
+            )}
+            <TouchableOpacity
+              onPress={closePostModal}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
