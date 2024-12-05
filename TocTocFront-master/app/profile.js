@@ -81,6 +81,10 @@ const ProfileScreen = () => {
     router.push("/follows");
   };
 
+  const goToFavorites = () => {
+    router.push("favorites");
+  };
+
   const handleProfilePress = () => {
     console.log("Ir al perfil de usuario");
   };
@@ -363,7 +367,7 @@ const ProfileScreen = () => {
 
         {/* Botones de Favoritos, Seguidos y Seguidores */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={goToFavorites}>
             <Text style={styles.buttonText}>Favoritos</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleFollowsPress} style={styles.button}>

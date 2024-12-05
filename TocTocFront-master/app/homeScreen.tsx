@@ -367,7 +367,6 @@ const styles = StyleSheet.create({
   searchResultName: {
     fontSize: 18,
     fontWeight: "bold",
-    
   },
   searchResultBio: {
     fontSize: 14,
