@@ -30,6 +30,9 @@ const ProfileScreen = () => {
   const [imageUri, setImageUri] = useState(
     "https://fakeimg.pl/30x30/cccccc/e60000?text=hugo"
   );
+  const [imageBanner, setImageBanner] = useState(
+    "https://fakeimg.pl/2000x300/1ba337/ffffff?text=Banner"
+  );
   const [userData, setUserData] = useState({
     name: "",
     lastname: "",
@@ -294,7 +297,7 @@ const ProfileScreen = () => {
               userData.bannerImage?.uri
                 ? { uri: userData.bannerImage.uri }
                 : {
-                    uri: "https://fakeimg.pl/2000x300/1ba337/ffffff?text=Banner",
+                    uri: imageBanner,
                   }
             }
             style={styles.bannerImage}
