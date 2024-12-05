@@ -82,7 +82,7 @@ const ProfileScreen = () => {
   };
 
   const goToFavorites = () => {
-    router.push("favorites");
+    router.push("/favorites");
   };
 
   const handleProfilePress = () => {
